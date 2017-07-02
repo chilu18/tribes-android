@@ -4,6 +4,8 @@
 
 Android application written for the Digital Tribes 2017 hackerthon
 
+<p align="center"><img width=60%% src="https://github.com/t04glovern/tribes-android/blob/master/images/tribes-app-demo.png"></p>
+
 ## Install
 
 1. Clone the repo `git clone https://github.com/t04glovern/tribes-android.git`
