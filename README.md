@@ -1,11 +1,8 @@
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+# DigiTribe - Android Application
 [![GitHub Issues](https://img.shields.io/github/issues/t04glovern/tribes-android.svg)](https://github.com/t04glovern/tribes-android/issues)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
 
-# DigiTribe - Android Application
-
-TODO: Write a project description
+Android application written for the Digital Tribes 2017 hackerthon
 
 ## Install
 
