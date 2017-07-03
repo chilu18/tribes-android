@@ -31,7 +31,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MapsActivity"
-            android:label="@string/app_name">
+            android:label="@string/title_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,8 +50,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".BluetoothActivity" />
-        <activity android:name=".USBActivity" />
+        <activity
+            android:name=".BluetoothActivity"
+            android:label="@string/title_bluetooth" />
+
+        <activity
+            android:name=".USBActivity"
+            android:label="@string/title_usb" />
 
         <service
             android:name=".USBService"

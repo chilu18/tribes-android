@@ -11,28 +11,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:scaleX="1.7"
+        android:scaleY="1.7"
+        android:textStyle="bold"
         android:layout_centerHorizontal="true"
         android:text="@string/serial_port"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        />
 
     <TextView
-        android:id="@+id/serial_title_text"
+        android:id="@+id/serial_data_view"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
-        android:background="#FFFFFF"/>
+        android:layout_below="@+id/textViewTitle"
+        android:background="#FFFFFF"
+        />
 
     <EditText
         android:id="@+id/serial_send_textbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/serial_title_text"
-        android:layout_alignRight="@+id/serial_title_text"
-        android:layout_below="@+id/serial_title_text"
+        android:layout_alignLeft="@+id/serial_data_view"
+        android:layout_alignRight="@+id/serial_data_view"
+        android:layout_below="@+id/serial_data_view"
         android:layout_marginTop="28dp"
         android:ems="10">
         <requestFocus/>
+
     </EditText>
 
     <Button
@@ -44,7 +51,36 @@
         android:layout_alignRight="@+id/serial_send_textbox"
         android:layout_below="@+id/serial_send_textbox"
         android:layout_marginTop="42dp"
-        android:text="Send"/>
+        android:text="Send"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/navigation">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:text="Baud:"
+            android:ellipsize="end"
+            android:textStyle="bold"
+            />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:id="@+id/serial_baud_spinner"
+            android:entries="@array/baud_arrays"
+            android:prompt="@string/baud_prompt"
+            android:ellipsize="end"
+            />
+
+    </LinearLayout>
 
     <include
         android:id="@+id/navigation"

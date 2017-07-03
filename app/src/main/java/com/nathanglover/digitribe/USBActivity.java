@@ -10,9 +10,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ public class USBActivity extends MainActivity {
     private TextView display;
     private EditText editText;
     private MyHandler mHandler;
+
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
@@ -80,8 +84,28 @@ public class USBActivity extends MainActivity {
 
         mHandler = new MyHandler(this);
 
-        display = (TextView) findViewById(R.id.serial_title_text);
+        display = (TextView) findViewById(R.id.serial_data_view);
+        display.setMovementMethod(new ScrollingMovementMethod());
+
         editText = (EditText) findViewById(R.id.serial_send_textbox);
+
+        Spinner spBaud = (Spinner) findViewById(R.id.serial_baud_spinner);
+        spBaud.setSelection(4);
+        spBaud.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                display.append("SYSM: Baud Rate changes supported soon.\n");
+                //String baud_rate = parent.getItemAtPosition(pos).toString();
+                //if (usbService != null) {
+                //    usbService.changeBaudRate(Integer.parseInt(baud_rate));
+                //    display.append("SYSM: Baud Rate changed to " + baud_rate + "\n");
+                //}
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+
         Button sendButton = (Button) findViewById(R.id.buttonSend);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +113,7 @@ public class USBActivity extends MainActivity {
                 if (!editText.getText().toString().equals("")) {
                     String data = editText.getText().toString();
                     if (usbService != null) { // if UsbService was correctly binded, Send data
-                        display.append("Sent: " + data + "\n");
+                        display.append("SENT: " + data + "\n");
                         usbService.write(data.getBytes());
                     }
                 }
@@ -152,7 +176,7 @@ public class USBActivity extends MainActivity {
             switch (msg.what) {
                 case USBService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
-                    mActivity.get().display.append("Received: " + data + "\n");
+                    mActivity.get().display.append("RECV: " + data + "\n");
                     break;
             }
         }

@@ -1,10 +1,29 @@
 <resources>
     <string name="app_name">DigiTribe</string>
 
-    <string name="title_maps">Map</string>
-    <string name="title_usb">USB</string>
-    <string name="title_bluetooth">Bluetooth</string>
+    <string name="nav_icon_maps">Maps</string>
+    <string name="nav_icon_usb">USB Serial</string>
+    <string name="nav_icon_bluetooth">Bluetooth</string>
+    <string name="title_maps">DigiTribe - Maps</string>
+    <string name="title_usb">DigiTribe - USB Serial</string>
+    <string name="title_bluetooth">DigiTribe - Bluetooth</string>
 
-    <string name="serial_port">Serial Port</string>
+    <string name="serial_port">USB Serial</string>
+    <string name="baud_prompt">Select Baud Rate</string>
+
+    <string-array name="baud_arrays">
+        <item>300</item>
+        <item>1200</item>
+        <item>2400</item>
+        <item>4800</item>
+        <item>9600</item>
+        <item>19200</item>
+        <item>38400</item>
+        <item>576600</item>
+        <item>744880</item>
+        <item>115200</item>
+        <item>230400</item>
+        <item>250000</item>
+    </string-array>
 
 </resources>

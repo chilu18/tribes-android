@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:orientation="vertical"
     tools:context="com.nathanglover.digitribe.BluetoothActivity">
 
 
@@ -17,7 +16,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Toggle LED"
+            android:text="Toggle to Send Data (1)"
             android:id="@+id/checkboxLED1"
             android:layout_marginTop="10dp"
             android:checked="false"
@@ -26,13 +25,15 @@
             android:scaleX="1.7"
             android:scaleY="1.7"
             android:textStyle="bold"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,7 +41,9 @@
                 android:text="RX:"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,13 +52,15 @@
                 android:maxLines="1"
                 android:text="&lt;Read Buffer>"
                 android:id="@+id/readBuffer"
-                android:layout_centerHorizontal="true" />
+                />
+
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,18 +68,21 @@
                 android:text="Status:"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.9"
-
                 android:text="&lt;Bluetooth Status>"
                 android:id="@+id/bluetoothStatus"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:layout_centerHorizontal="true"
-                android:layout_alignTop="@+id/checkboxLED1" />
+                android:layout_alignTop="@+id/checkboxLED1"
+                />
+
         </LinearLayout>
 
         <Button
