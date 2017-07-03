@@ -17,6 +17,11 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <!--         USB Serial Permissions -->
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -46,6 +51,11 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".BluetoothActivity" />
+        <activity android:name=".USBActivity" />
+
+        <service
+            android:name=".USBService"
+            android:enabled="true" />
     </application>
 
 </manifest>

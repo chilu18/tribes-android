@@ -7,7 +7,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 public abstract class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -41,8 +40,8 @@ public abstract class MainActivity extends AppCompatActivity implements BottomNa
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_map) {
                 startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-            } else if (itemId == R.id.navigation_dashboard) {
-                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            } else if (itemId == R.id.navigation_usb) {
+                startActivity(new Intent(getApplicationContext(), USBActivity.class));
             } else if (itemId == R.id.navigation_bluetooth) {
                 startActivity(new Intent(getApplicationContext(), BluetoothActivity.class));
             }
