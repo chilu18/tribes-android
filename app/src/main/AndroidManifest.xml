@@ -17,7 +17,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!--         USB Serial Permissions -->
+    <!-- USB Serial Permissions -->
     <uses-feature
         android:name="android.hardware.usb.host"
         android:required="true" />
@@ -53,14 +53,17 @@
         <activity
             android:name=".BluetoothActivity"
             android:label="@string/title_bluetooth" />
-
         <activity
             android:name=".USBActivity"
             android:label="@string/title_usb" />
+        <activity
+            android:name=".DebugActivity"
+            android:label="@string/title_debug" />
 
         <service
             android:name=".USBService"
             android:enabled="true" />
+
     </application>
 
 </manifest>
