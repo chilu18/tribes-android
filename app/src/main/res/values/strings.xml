@@ -4,12 +4,12 @@
     <string name="nav_icon_maps">Maps</string>
     <string name="nav_icon_usb">USB Serial</string>
     <string name="nav_icon_bluetooth">Bluetooth</string>
-    <string name="nav_icon_debug">Debug</string>
+    <string name="nav_icon_debug">Data Logs</string>
 
     <string name="title_maps">DigiTribe - Maps</string>
     <string name="title_usb">DigiTribe - USB Serial</string>
     <string name="title_bluetooth">DigiTribe - Bluetooth</string>
-    <string name="title_debug">Kenny Loggins Debugger</string>
+    <string name="title_debug">DigiTribe - Data Logs</string>
 
     <string name="serial_port">USB Serial</string>
     <string name="baud_prompt">Select Baud Rate</string>
