@@ -4,7 +4,7 @@
 
 Android application written for the Digital Tribes 2017 hackerthon
 
-<p align="center"><img width=100%% src="https://github.com/t04glovern/tribes-android/blob/master/images/tribes-app-demo.png"></p>
+<p align="center"><img width=100%% src="https://github.com/t04glovern/tribes-android/blob/master/images/tribes-app-demo-01.png"></p>
 
 ## Install
 
