@@ -1,5 +1,6 @@
 package com.nathanglover.digitribe;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -8,6 +9,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -55,6 +58,14 @@ public class MapsActivity extends MainActivity implements OnMapReadyCallback {
                 perth_core).title("Perth CORE");
         MarkerOptions perth_sap_marker = new MarkerOptions().position(
                 perth_sap).title("Perth SAP");
+
+        Circle circle = map.addCircle(new CircleOptions()
+                .center(perth_core)
+                .radius(300)
+                .strokeWidth(5)
+                .strokeColor(Color.RED)
+                .fillColor(Color.argb(128, 255, 0, 0))
+                .clickable(true));
 
         // Changing marker icons
         perth_core_marker.icon(BitmapDescriptorFactory

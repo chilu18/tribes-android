@@ -41,7 +41,6 @@ public class BluetoothActivity extends MainActivity {
     private Button mDiscoverBtn;
     private BluetoothAdapter mBTAdapter;
     private Set<BluetoothDevice> mPairedDevices;
-    private Set<BluetoothDevice> mDiscoveredDevices;
     private ArrayAdapter<String> mBTArrayAdapter;
     private ListView mDevicesListView;
     private CheckBox mLED1;
