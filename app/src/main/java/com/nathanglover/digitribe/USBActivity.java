@@ -90,7 +90,7 @@ public class USBActivity extends MainActivity {
         editText = (EditText) findViewById(R.id.serial_send_textbox);
 
         Spinner spBaud = (Spinner) findViewById(R.id.serial_baud_spinner);
-        spBaud.setSelection(4);
+        spBaud.setSelection(9);
         spBaud.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 display.append("SYSM: Baud Rate changes supported soon.\n");
@@ -113,7 +113,7 @@ public class USBActivity extends MainActivity {
                 if (!editText.getText().toString().equals("")) {
                     String data = editText.getText().toString();
                     if (usbService != null) { // if UsbService was correctly binded, Send data
-                        display.append("SENT: " + data + "\n");
+                        //display.append("SENT: " + data + "\n");
                         usbService.write(data.getBytes());
                     }
                 }
@@ -176,7 +176,7 @@ public class USBActivity extends MainActivity {
             switch (msg.what) {
                 case USBService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
-                    mActivity.get().display.append("RECV: " + data + "\n");
+                    mActivity.get().display.append(data + "\n");
                     break;
             }
         }
