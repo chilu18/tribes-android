@@ -1,32 +1,65 @@
 package com.nathanglover.digitribe;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Random;
 
-public class MapsActivity extends MainActivity implements OnMapReadyCallback {
+public class MapsActivity extends MainActivity
+        implements
+        GoogleMap.OnMyLocationButtonClickListener,
+        OnMapReadyCallback,
+        ActivityCompat.OnRequestPermissionsResultCallback,
+        LocationListener {
+
+    /**
+     * Request code for location permission request.
+     *
+     * @see #onRequestPermissionsResult(int, String[], int[])
+     */
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+    /**
+     * Flag indicating whether a requested permission has been denied after returning in
+     * {@link #onRequestPermissionsResult(int, String[], int[])}.
+     */
+    private boolean mPermissionDenied = false;
 
     private String TAG = MapsActivity.class.getSimpleName();
-    private GoogleMap googleMap;
+    private GoogleMap mMap;
+    private LocationManager locationManager;
+    private String provider;
 
     private ArrayList<DataPointModel> dataPointList;
 
@@ -46,6 +79,7 @@ public class MapsActivity extends MainActivity implements OnMapReadyCallback {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
         mapFragment.getMapAsync(this);
     }
 
@@ -60,8 +94,9 @@ public class MapsActivity extends MainActivity implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap map) {
-        googleMap = map;
-
+        mMap = map;
+        mMap.setOnMyLocationButtonClickListener(this);
+        enableMyLocation();
         dataPointList = new ArrayList<>();
         new GetNodeData().execute();
 
@@ -93,20 +128,139 @@ public class MapsActivity extends MainActivity implements OnMapReadyCallback {
         googleMap.addMarker(perth_core_marker);
         googleMap.addMarker(perth_sap_marker);
         */
+    }
 
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(-31.953494, 115.8540433)).zoom(10).build();
+    @Override
+    public boolean onMyLocationButtonClick() {
+        //Toast.makeText(this, "Locating...", Toast.LENGTH_SHORT).show();
+        return false;
+    }
 
-        googleMap.animateCamera(CameraUpdateFactory
-                .newCameraPosition(cameraPosition));
+    @Override
+    public void onPause() {
+        super.onPause();
+        locationManager.removeUpdates(this);
+    }
+
+    /**
+     * Enables the My Location layer if the fine location permission has been granted.
+     */
+    private void enableMyLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission to access the location is missing.
+            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.ACCESS_FINE_LOCATION, true);
+        } else if (mMap != null) {
+            // Access to the location has been granted to the app.
+            mMap.setMyLocationEnabled(true);
+        }
+
+        LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean enabledGPS = service
+                .isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean enabledWiFi = service
+                .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (!enabledGPS) {
+            Toast.makeText(MapsActivity.this, "GPS signal not found", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        } else if (!enabledWiFi) {
+            Toast.makeText(MapsActivity.this, "Network signal not found", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        }
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        // Define the criteria how to select the location provider -> use
+        // default
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+
+        // Initialize the location fields
+        if (location != null) {
+            onLocationChanged(location);
+        } else {
+            //do something
+        }
+        setUpMap();
+    }
+
+    private void setUpMap() {
+        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.getUiSettings().setTiltGesturesEnabled(true);
+        mMap.getUiSettings().setRotateGesturesEnabled(true);
+        mMap.getUiSettings().setScrollGesturesEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setPadding(0,0,0,300);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
+            return;
+        }
+
+        if (PermissionUtils.isPermissionGranted(permissions, grantResults,
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // Enable the my location layer if the permission has been granted.
+            enableMyLocation();
+        } else {
+            // Display the missing permission error dialog when the fragments resume.
+            mPermissionDenied = true;
+        }
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        if (mPermissionDenied) {
+            // Permission was not granted, display error dialog.
+            showMissingPermissionError();
+            mPermissionDenied = false;
+        }
+    }
+
+    /**
+     * Displays a dialog with error message explaining that the location permission is missing.
+     */
+    private void showMissingPermissionError() {
+        PermissionUtils.PermissionDeniedDialog
+                .newInstance(true).show(getSupportFragmentManager(), "Location permissions are missing. Please resolve.");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        double lat =  location.getLatitude();
+        double lng = location.getLongitude();
+        LatLng coordinate = new LatLng(lat, lng);
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15.0f));
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 
     private class GetNodeData extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Toast.makeText(MapsActivity.this,"Json GetNodeData is downloading",Toast.LENGTH_LONG).show();
-
+            Toast.makeText(MapsActivity.this,"Syncing...",Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -176,6 +330,11 @@ public class MapsActivity extends MainActivity implements OnMapReadyCallback {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
+            // For generating random radias
+            Random rand = new Random();
+            int min = 100;
+            int max = 500;
+
             for (DataPointModel point : dataPointList) {
                 // Add market for each option
                 MarkerOptions mo = new MarkerOptions().position(
@@ -184,8 +343,20 @@ public class MapsActivity extends MainActivity implements OnMapReadyCallback {
                                 point.getLocation_lon()
                         )).title(point.getSensor_id()
                 );
+
+                Circle circle = mMap.addCircle(new CircleOptions()
+                        .center(new LatLng(
+                                point.getLocation_lat(),
+                                point.getLocation_lon()
+                        ))
+                        .radius(rand.nextInt(max - min + 1) + 1)
+                        .strokeWidth(5)
+                        .strokeColor(Color.RED)
+                        .fillColor(Color.argb(128, 255, 0, 0))
+                );
+
                 // Add market to map
-                googleMap.addMarker(mo);
+                mMap.addMarker(mo);
             }
         }
     }
