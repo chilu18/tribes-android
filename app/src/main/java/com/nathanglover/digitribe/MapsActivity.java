@@ -132,13 +132,37 @@ public class MapsActivity extends MainActivity implements OnMapReadyCallback {
                         double location_lon = n.getDouble("location_lon");
                         double location_lat = n.getDouble("location_lat");
                         String timestamp = n.getString("timestamp");
-
+                        String datestamp = n.getString("datestamp");
+                        double altitude = n.getDouble("velocity");
+                        Boolean GPSerror = n.getBoolean("GPSerror");
+                        Boolean IMUerror = n.getBoolean("IMUerror");
+                        Boolean rightdirection = n.getBoolean("rightdirection");
+                        double course = n.getDouble("course");
+                        double nsats = n.getDouble("nsats");
+                        Integer SNR1 = n.getInteger("SNR1");
+                        Integer SNR2 = n.getInteger("SNR2");
+                        Integer SNR3 = n.getInteger("SNR3");
+                        Integer SNR4 = n.getInteger("SNR4");
+                    }
+     
                         DataPointModel point = new DataPointModel(
                                 sensor_id,
                                 sensor_mac,
                                 location_lon,
                                 location_lat,
-                                timestamp
+                                timestamp,
+                                datestamp,
+                                altitude,
+                                velocity,
+                                GPSerror,
+                                IMUerror,
+                                rightdirection,
+                                course,
+                                nsats,
+                                SNR1,
+                                SNR2,
+                                SNR3,
+                                SNR4
                         );
 
                         // adding point to data point list
