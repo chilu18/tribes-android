@@ -8,13 +8,13 @@ public class DataPointModel {
     private double location_lat;
     private String timestamp;
     private String datestamp;
-    private Double altitude;
-    private Double velocity;
+    private double altitude;
+    private double velocity;
     private Boolean GPSerror;
     private Boolean IMUerror;
     private Boolean rightdirection;
-    private Double course;
-    private Double nsats;
+    private double course;
+    private double nsats;
     private Integer SNR1;
     private Integer SNR2;
     private Integer SNR3;
@@ -22,8 +22,8 @@ public class DataPointModel {
   
 
     public DataPointModel(String sensor_id, String sensor_mac, double location_lon, double location_lat, String timestamp,
-                         String datestamp, Double altitude, Double velocity, Boolean GPSerror, Boolean IMUerror, Boolean rightdirection
-                         Double course, Double nsats, Integer SNR1, Integer SNR2, Integer SNR3, Integer SNR4) {
+                         String datestamp, double altitude, double velocity, Boolean GPSerror, Boolean IMUerror, Boolean rightdirection
+                         double course, double nsats, Integer SNR1, Integer SNR2, Integer SNR3, Integer SNR4) {
         this.sensor_id = sensor_id;
         this.sensor_mac = sensor_mac;
         this.location_lon = location_lon;
