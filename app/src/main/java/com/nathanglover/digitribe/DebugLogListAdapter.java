@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class DebugLogListAdapter extends ArrayAdapter<DebugDataModel> implements View.OnClickListener {
+public class DebugLogListAdapter extends ArrayAdapter<DataPointModel> implements View.OnClickListener {
 
-    private ArrayList<DebugDataModel> dataSet;
+    private ArrayList<DataPointModel> dataSet;
     Context mContext;
 
     private static class ViewHolder {
@@ -26,7 +26,7 @@ public class DebugLogListAdapter extends ArrayAdapter<DebugDataModel> implements
         ImageView status;
     }
 
-    public DebugLogListAdapter(ArrayList<DebugDataModel> data, Context context) {
+    public DebugLogListAdapter(ArrayList<DataPointModel> data, Context context) {
         super(context, R.layout.debug_row_item, data);
         this.dataSet = data;
         this.mContext = context;
@@ -36,12 +36,12 @@ public class DebugLogListAdapter extends ArrayAdapter<DebugDataModel> implements
     public void onClick(View v) {
         int position = (Integer) v.getTag();
         Object object = getItem(position);
-        DebugDataModel dataModel = (DebugDataModel)object;
+        DataPointModel dataModel = (DataPointModel)object;
 
         switch (v.getId())
         {
             case R.id.item_status:
-                Snackbar.make(v, "Last Update: " +dataModel.getInfo(), Snackbar.LENGTH_LONG)
+                Snackbar.make(v, "Last Update: " +dataModel.getTimestamp(), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
                 break;
         }
@@ -53,7 +53,7 @@ public class DebugLogListAdapter extends ArrayAdapter<DebugDataModel> implements
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        DebugDataModel dataModel = getItem(position);
+        DataPointModel dataModel = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
 
@@ -84,8 +84,8 @@ public class DebugLogListAdapter extends ArrayAdapter<DebugDataModel> implements
 
         viewHolder.txt_sensor_id.setText(dataModel.getSensor_id());
         viewHolder.txt_sensor_mac.setText(dataModel.getSensor_mac());
-        viewHolder.txt_location_lon.setText(dataModel.getLocation_lon());
-        viewHolder.txt_location_lat.setText(dataModel.getLocation_lat());
+        viewHolder.txt_location_lon.setText(String.valueOf(dataModel.getLocation_lon()));
+        viewHolder.txt_location_lat.setText(String.valueOf(dataModel.getLocation_lat()));
         viewHolder.status.setOnClickListener(this);
         viewHolder.status.setTag(position);
         // Return the completed view to render on screen

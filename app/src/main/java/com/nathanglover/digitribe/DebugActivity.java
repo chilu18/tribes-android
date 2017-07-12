@@ -1,22 +1,31 @@
 package com.nathanglover.digitribe;
 
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.github.jinatonic.confetti.CommonConfetti;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class DebugActivity extends MainActivity {
 
-    private ArrayList<DebugDataModel> dataModels;
+    private String TAG = DebugActivity.class.getSimpleName();
+    private ArrayList<DataPointModel> dataPointList;
+
     private ListView listView;
     private DebugLogListAdapter adapter;
 
@@ -40,35 +49,20 @@ public class DebugActivity extends MainActivity {
 
         // Log list logic
         listView=(ListView)findViewById(R.id.log_list);
-        dataModels= new ArrayList<>();
+        dataPointList= new ArrayList<>();
 
         // Populate Log list here
-        dataModels.add(new DebugDataModel("MSH_NODE_01", "00:14:22:01:23:45", -31.9538, 115.8532, "January 1, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_02", "00:14:22:01:23:45", -32.9538, 116.8532, "January 2, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_03", "00:14:22:01:23:45", -33.9538, 117.8532, "January 3, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_04", "00:14:22:01:23:45", -34.9538, 118.8532, "January 4, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_05", "00:14:22:01:23:45", -35.9538, 119.8532, "January 5, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_06", "00:14:22:01:23:45", -36.9538, 120.8532, "January 6, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_07", "00:14:22:01:23:45", -37.9538, 121.8532, "January 7, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_08", "00:14:22:01:23:45", -38.9538, 122.8532, "January 8, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_09", "00:14:22:01:23:45", -39.9538, 123.8532, "January 9, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_10", "00:14:22:01:23:45", -40.9538, 124.8532, "January 10, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_11", "00:14:22:01:23:45", -41.9538, 125.8532, "January 11, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_12", "00:14:22:01:23:45", -42.9538, 126.8532, "January 12, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_13", "00:14:22:01:23:45", -43.9538, 127.8532, "January 13, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_14", "00:14:22:01:23:45", -44.9538, 128.8532, "January 14, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_15", "00:14:22:01:23:45", -45.9538, 129.8532, "January 15, 1970, 00:00:00 GMT"));
-        dataModels.add(new DebugDataModel("MSH_NODE_16", "00:14:22:01:23:45", -46.9538, 130.8532, "January 16, 1970, 00:00:00 GMT"));
+        new GetNodeData().execute();
 
-        adapter= new DebugLogListAdapter(dataModels,getApplicationContext());
+        adapter= new DebugLogListAdapter(dataPointList,getApplicationContext());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                DebugDataModel dataModel= dataModels.get(position);
+                DataPointModel dataModel= dataPointList.get(position);
 
-                Snackbar.make(view, dataModel.getSensor_id()+ " MAC: " +dataModel.getSensor_mac()+"\n"+dataModel.getLocation(), Snackbar.LENGTH_LONG)
+                Snackbar.make(view, dataModel.getSensor_id()+ " Last Updated: " +dataModel.getTimestamp(), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
             }
         });
@@ -98,5 +92,84 @@ public class DebugActivity extends MainActivity {
     public void onPause() {
         super.onPause();
         mediaPlayer.pause();
+    }
+
+    private class GetNodeData extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(DebugActivity.this,"logs loading...",Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+            String url = "https://dt.nathanglover.com/api/v1/data";
+            String jsonStr = sh.makeServiceCall(url);
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+
+                    // Getting JSON Array node
+                    JSONArray node_data = jsonObj.getJSONArray("data");
+
+                    // looping through All Data points
+                    for (int i = 0; i < node_data.length(); i++) {
+                        JSONObject n = node_data.getJSONObject(i);
+                        String sensor_id = n.getString("sensor_id");
+                        String sensor_mac = n.getString("sensor_mac");
+                        double location_lon = n.getDouble("location_lon");
+                        double location_lat = n.getDouble("location_lat");
+                        String timestamp = n.getString("timestamp");
+
+                        DataPointModel point = new DataPointModel(
+                                sensor_id,
+                                sensor_mac,
+                                location_lon,
+                                location_lat,
+                                timestamp
+                        );
+
+                        // adding point to data point list
+                        dataPointList.add(point);
+                    }
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                }
+
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+
+        }
     }
 }

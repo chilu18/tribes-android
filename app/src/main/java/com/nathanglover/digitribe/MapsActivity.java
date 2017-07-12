@@ -7,16 +7,28 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class MapsActivity extends MainActivity implements OnMapReadyCallback {
 
+    private String TAG = MapsActivity.class.getSimpleName();
     private GoogleMap googleMap;
+
+    private ArrayList<DataPointModel> dataPointList;
 
     @Override
     int getContentViewId() {
@@ -50,6 +62,10 @@ public class MapsActivity extends MainActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap map) {
         googleMap = map;
 
+        dataPointList = new ArrayList<>();
+        new GetNodeData().execute();
+
+        /*
         LatLng perth_core = new LatLng(-31.9538, 115.8532);
         LatLng perth_sap = new LatLng(-31.953494, 115.8540433);
 
@@ -76,11 +92,101 @@ public class MapsActivity extends MainActivity implements OnMapReadyCallback {
         // adding markers
         googleMap.addMarker(perth_core_marker);
         googleMap.addMarker(perth_sap_marker);
+        */
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(-31.953494, 115.8540433)).zoom(15).build();
+                .target(new LatLng(-31.953494, 115.8540433)).zoom(10).build();
 
         googleMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
+    }
+
+    private class GetNodeData extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(MapsActivity.this,"Json GetNodeData is downloading",Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+            String url = "https://dt.nathanglover.com/api/v1/data";
+            String jsonStr = sh.makeServiceCall(url);
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+
+                    // Getting JSON Array node
+                    JSONArray node_data = jsonObj.getJSONArray("data");
+
+                    // looping through All Data points
+                    for (int i = 0; i < node_data.length(); i++) {
+                        JSONObject n = node_data.getJSONObject(i);
+                        String sensor_id = n.getString("sensor_id");
+                        String sensor_mac = n.getString("sensor_mac");
+                        double location_lon = n.getDouble("location_lon");
+                        double location_lat = n.getDouble("location_lat");
+                        String timestamp = n.getString("timestamp");
+
+                        DataPointModel point = new DataPointModel(
+                                sensor_id,
+                                sensor_mac,
+                                location_lon,
+                                location_lat,
+                                timestamp
+                        );
+
+                        // adding point to data point list
+                        dataPointList.add(point);
+                    }
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                }
+
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            for (DataPointModel point : dataPointList) {
+                // Add market for each option
+                MarkerOptions mo = new MarkerOptions().position(
+                        new LatLng(
+                                point.getLocation_lat(),
+                                point.getLocation_lon()
+                        )).title(point.getSensor_id()
+                );
+                // Add market to map
+                googleMap.addMarker(mo);
+            }
+        }
     }
 }

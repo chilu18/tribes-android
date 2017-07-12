@@ -1,15 +1,15 @@
 <resources>
-    <string name="app_name">DigiTribe</string>
+    <string name="app_name">K-Logger</string>
 
     <string name="nav_icon_maps">Maps</string>
     <string name="nav_icon_usb">USB Serial</string>
     <string name="nav_icon_bluetooth">Bluetooth</string>
     <string name="nav_icon_debug">Data Logs</string>
 
-    <string name="title_maps">Maps</string>
+    <string name="title_maps">K-Logger</string>
     <string name="title_usb">USB Serial</string>
     <string name="title_bluetooth">Bluetooth</string>
-    <string name="title_debug">Logs</string>
+    <string name="title_debug">Kenny-Loggins</string>
 
     <string name="serial_port">USB Serial</string>
     <string name="baud_prompt">Select Baud Rate</string>
