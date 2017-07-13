@@ -11,6 +11,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -22,11 +23,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -35,6 +34,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MapsActivity extends MainActivity
         implements
@@ -61,7 +62,56 @@ public class MapsActivity extends MainActivity
     private LocationManager locationManager;
     private String provider;
 
+    private Random rand;
+    int min = 27;
+    int max = 30;
+
     private ArrayList<DataPointModel> dataPointList;
+    private ArrayList<MarkerOptions> markerList;
+
+    private Timer timer;
+    private TimerTask timerTask;
+    private Handler handler = new Handler();
+
+    //To stop timer
+    private void stopTimer(){
+        if(timer != null){
+            timer.cancel();
+            timer.purge();
+        }
+    }
+
+    //To start timer
+    private void startTimer(){
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run(){
+                        mMap.clear();
+                        for (MarkerOptions mo : markerList) {
+                            LatLng newLocation = new LatLng(
+                                    mo.getPosition().latitude + (-0.00001 + (0.00001 - -0.00001) * rand.nextDouble()),
+                                    mo.getPosition().longitude + (-0.00001 + (0.00001 - -0.00001) * rand.nextDouble())
+                            );
+
+                            Circle circle = mMap.addCircle(new CircleOptions()
+                                    .center(newLocation)
+                                    .radius(rand.nextInt(max - min + 1) + 1)
+                                    .strokeWidth(5)
+                                    .strokeColor(Color.RED)
+                                    .fillColor(Color.argb(128, 255, 0, 0))
+                            );
+
+                            mo.position(newLocation);
+                            mMap.addMarker(mo);
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(timerTask, 5000, 5000);
+    }
 
     @Override
     int getContentViewId() {
@@ -80,6 +130,9 @@ public class MapsActivity extends MainActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
+        rand = new Random();
+
+        // List of markers
         mapFragment.getMapAsync(this);
     }
 
@@ -96,38 +149,12 @@ public class MapsActivity extends MainActivity
     public void onMapReady(GoogleMap map) {
         mMap = map;
         mMap.setOnMyLocationButtonClickListener(this);
+
         enableMyLocation();
+
         dataPointList = new ArrayList<>();
+        markerList = new ArrayList<>();
         new GetNodeData().execute();
-
-        /*
-        LatLng perth_core = new LatLng(-31.9538, 115.8532);
-        LatLng perth_sap = new LatLng(-31.953494, 115.8540433);
-
-        // create markers
-        MarkerOptions perth_core_marker = new MarkerOptions().position(
-                perth_core).title("Perth CORE");
-        MarkerOptions perth_sap_marker = new MarkerOptions().position(
-                perth_sap).title("Perth SAP");
-
-        Circle circle = map.addCircle(new CircleOptions()
-                .center(perth_core)
-                .radius(300)
-                .strokeWidth(5)
-                .strokeColor(Color.RED)
-                .fillColor(Color.argb(128, 255, 0, 0))
-                .clickable(true));
-
-        // Changing marker icons
-        perth_core_marker.icon(BitmapDescriptorFactory
-                .defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
-        perth_sap_marker.icon(BitmapDescriptorFactory
-                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-
-        // adding markers
-        googleMap.addMarker(perth_core_marker);
-        googleMap.addMarker(perth_sap_marker);
-        */
     }
 
     @Override
@@ -139,6 +166,7 @@ public class MapsActivity extends MainActivity
     @Override
     public void onPause() {
         super.onPause();
+        stopTimer();
         locationManager.removeUpdates(this);
     }
 
@@ -238,7 +266,7 @@ public class MapsActivity extends MainActivity
         double lng = location.getLongitude();
         LatLng coordinate = new LatLng(lat, lng);
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 18.0f));
     }
 
     @Override
@@ -286,37 +314,37 @@ public class MapsActivity extends MainActivity
                         double location_lon = n.getDouble("location_lon");
                         double location_lat = n.getDouble("location_lat");
                         String timestamp = n.getString("timestamp");
-                        //String datestamp = n.getString("datestamp");
-                        //double altitude = n.getDouble("altitude");
-                        //double velocity = n.getDouble("velocity");
-                        //boolean GPSerror = n.getBoolean("GPSerror");
-                        //boolean IMUerror = n.getBoolean("IMUerror");
-                        //boolean rightdirection = n.getBoolean("rightdirection");
-                        //double course = n.getDouble("course");
-                        //double nsats = n.getDouble("nsats");
-                        //int snr1 = n.getInt("snr1");
-                        //int snr2 = n.getInt("snr2");
-                        //int snr3 = n.getInt("snr3");
-                        //int snr4 = n.getInt("snr4");
+                        String datestamp = n.getString("datestamp");
+                        double altitude = n.getDouble("altitude");
+                        double velocity = n.getDouble("velocity");
+                        boolean GPSerror = n.getBoolean("GPSerror");
+                        boolean IMUerror = n.getBoolean("IMUerror");
+                        boolean rightdirection = n.getBoolean("rightdirection");
+                        double course = n.getDouble("course");
+                        double nsats = n.getInt("nsats");
+                        int snr1 = n.getInt("snr1");
+                        int snr2 = n.getInt("snr2");
+                        int snr3 = n.getInt("snr3");
+                        int snr4 = n.getInt("snr4");
      
                         DataPointModel point = new DataPointModel(
                                 sensor_id,
                                 sensor_mac,
                                 location_lon,
                                 location_lat,
-                                timestamp
-                                //datestamp,
-                                //altitude,
-                                //velocity,
-                                //GPSerror,
-                                //IMUerror,
-                                //rightdirection,
-                                //course,
-                                //nsats,
-                                //snr1,
-                                //snr2,
-                                //snr3,
-                                //snr4
+                                timestamp,
+                                datestamp,
+                                altitude,
+                                velocity,
+                                GPSerror,
+                                IMUerror,
+                                rightdirection,
+                                course,
+                                nsats,
+                                snr1,
+                                snr2,
+                                snr3,
+                                snr4
                         );
 
                         // adding point to data point list
@@ -354,13 +382,7 @@ public class MapsActivity extends MainActivity
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
-            // For generating random radias
-            Random rand = new Random();
-            int min = 100;
-            int max = 500;
-
             for (DataPointModel point : dataPointList) {
-                // Add market for each option
                 MarkerOptions mo = new MarkerOptions().position(
                         new LatLng(
                                 point.getLocation_lat(),
@@ -368,7 +390,7 @@ public class MapsActivity extends MainActivity
                         )).title(point.getSensor_id()
                 );
 
-                Circle circle = mMap.addCircle(new CircleOptions()
+                mMap.addCircle(new CircleOptions()
                         .center(new LatLng(
                                 point.getLocation_lat(),
                                 point.getLocation_lon()
@@ -381,7 +403,10 @@ public class MapsActivity extends MainActivity
 
                 // Add market to map
                 mMap.addMarker(mo);
+                // Add marketOptions to list
+                markerList.add(mo);
             }
+            startTimer();
         }
     }
 }

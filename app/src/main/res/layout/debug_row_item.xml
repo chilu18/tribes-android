@@ -56,6 +56,144 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sensor_altitude_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Altitude: "
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_altitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20.1"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sensor_velocity_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Velocity: "
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_velocity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.4"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sensor_gps_error_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GPS Error: "
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_gps_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="false"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sensor_imu_error_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IMU Error: "
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_imu_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="true"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sensor_rightdirection_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Valid Orientation: "
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_rightdirection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="true"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/location_course_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Course: "
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_course"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.37379"
+                android:textAppearance="?android:attr/textAppearanceButton"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -106,6 +244,121 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="115.8532"
+                android:textAppearance="?android:attr/textAppearanceButton"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sensor_nsats_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Satellites: "
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_nsats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="217"
+                android:textAppearance="?android:attr/textAppearanceButton"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sensor_snr1_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SNR1: "
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_snr1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="80"
+                android:textAppearance="?android:attr/textAppearanceButton"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sensor_snr2_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SNR2: "
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_snr2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2"
+                android:textAppearance="?android:attr/textAppearanceButton"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sensor_snr3_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SNR3: "
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_snr3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-56"
+                android:textAppearance="?android:attr/textAppearanceButton"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/sensor_snr4_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SNR4: "
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sensor_snr4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-9"
                 android:textAppearance="?android:attr/textAppearanceButton"
                 android:textColor="@android:color/black" />
 

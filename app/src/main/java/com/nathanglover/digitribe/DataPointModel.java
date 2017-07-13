@@ -15,10 +15,10 @@ public class DataPointModel {
     private Boolean rightdirection;
     private double course;
     private double nsats;
-    private Integer SNR1;
-    private Integer SNR2;
-    private Integer SNR3;
-    private Integer SNR4;
+    private Integer snr1;
+    private Integer snr2;
+    private Integer snr3;
+    private Integer snr4;
 
     public DataPointModel(String sensor_id,
                           String sensor_mac,
@@ -50,10 +50,10 @@ public class DataPointModel {
         this.rightdirection = rightdirection;
         this.course = course;
         this.nsats = nsats;
-        this.SNR1 = snr1;
-        this.SNR2 = snr2;
-        this.SNR3 = snr3;
-        this.SNR4 = snr4;
+        this.snr1 = snr1;
+        this.snr2 = snr2;
+        this.snr3 = snr3;
+        this.snr4 = snr4;
     }
 
     /*
@@ -136,28 +136,28 @@ public class DataPointModel {
         return nsats;
     }
 
-    public double getSNR1() {
+    public int getSNR1() {
         //shows where you're getting bad signal
         //returns dbm, if it's not higher than -80 then you've got problems
-        return SNR1;
+        return snr1;
     }
 
-    public double getSNR2() {
+    public int getSNR2() {
         //shows where you're getting bad signal
         //returns dbm, if it's not higher than -80 then you've got problems
-        return SNR2;
+        return snr2;
     }
 
-    public double getSNR3() {
+    public int getSNR3() {
         //shows where you're getting bad signal
         //returns dbm, if it's not higher than -80 then you've got problems
-        return SNR3;
+        return snr3;
     }
 
-    public double getSNR4() {
+    public int getSNR4() {
         //shows where you're getting bad signal
         //returns dbm, if it's not higher than -80 then you've got problems
-        return SNR4;
+        return snr4;
     }
 
 }

@@ -21,8 +21,21 @@ public class DebugLogListAdapter extends ArrayAdapter<DataPointModel> implements
     private static class ViewHolder {
         TextView txt_sensor_id;
         TextView txt_sensor_mac;
+        TextView txt_sensor_altitude;
+        TextView txt_sensor_velocity;
+        TextView txt_sensor_gps_error;
+        TextView txt_sensor_imu_error;
+        TextView txt_sensor_rightdirection;
+        TextView txt_sensor_course;
+
         TextView txt_location_lon;
         TextView txt_location_lat;
+        TextView txt_sensor_nsats;
+        TextView txt_sensor_snr1;
+        TextView txt_sensor_snr2;
+        TextView txt_sensor_snr3;
+        TextView txt_sensor_snr4;
+
         ImageView status;
     }
 
@@ -41,7 +54,7 @@ public class DebugLogListAdapter extends ArrayAdapter<DataPointModel> implements
         switch (v.getId())
         {
             case R.id.item_status:
-                Snackbar.make(v, "Last Update: " +dataModel.getTimestamp(), Snackbar.LENGTH_LONG)
+                Snackbar.make(v, "Last Sensor Update: " +dataModel.getTimestamp() +"\nGPS Datestamp: " +dataModel.getDatestamp(), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
                 break;
         }
@@ -66,8 +79,21 @@ public class DebugLogListAdapter extends ArrayAdapter<DataPointModel> implements
             convertView = inflater.inflate(R.layout.debug_row_item, parent, false);
             viewHolder.txt_sensor_id = (TextView) convertView.findViewById(R.id.sensor_id);
             viewHolder.txt_sensor_mac = (TextView) convertView.findViewById(R.id.sensor_mac);
+            viewHolder.txt_sensor_altitude = (TextView) convertView.findViewById(R.id.sensor_altitude);
+            viewHolder.txt_sensor_velocity = (TextView) convertView.findViewById(R.id.sensor_velocity);
+            viewHolder.txt_sensor_gps_error = (TextView) convertView.findViewById(R.id.sensor_gps_error);
+            viewHolder.txt_sensor_imu_error = (TextView) convertView.findViewById(R.id.sensor_imu_error);
+            viewHolder.txt_sensor_rightdirection = (TextView) convertView.findViewById(R.id.sensor_rightdirection);
+            viewHolder.txt_sensor_course = (TextView) convertView.findViewById(R.id.sensor_course);
+
             viewHolder.txt_location_lon = (TextView) convertView.findViewById(R.id.location_lon);
             viewHolder.txt_location_lat = (TextView) convertView.findViewById(R.id.location_lat);
+            viewHolder.txt_sensor_nsats = (TextView) convertView.findViewById(R.id.sensor_nsats);
+            viewHolder.txt_sensor_snr1 = (TextView) convertView.findViewById(R.id.sensor_snr1);
+            viewHolder.txt_sensor_snr2 = (TextView) convertView.findViewById(R.id.sensor_snr2);
+            viewHolder.txt_sensor_snr3 = (TextView) convertView.findViewById(R.id.sensor_snr3);
+            viewHolder.txt_sensor_snr4 = (TextView) convertView.findViewById(R.id.sensor_snr4);
+
             viewHolder.status = (ImageView) convertView.findViewById(R.id.item_status);
 
             result=convertView;
@@ -84,8 +110,21 @@ public class DebugLogListAdapter extends ArrayAdapter<DataPointModel> implements
 
         viewHolder.txt_sensor_id.setText(dataModel.getSensor_id());
         viewHolder.txt_sensor_mac.setText(dataModel.getSensor_mac());
+        viewHolder.txt_sensor_altitude.setText(String.valueOf(dataModel.getAltitude()));
+        viewHolder.txt_sensor_velocity.setText(String.valueOf(dataModel.getVelocity()));
+        viewHolder.txt_sensor_gps_error.setText(String.valueOf(dataModel.getGPSerror()));
+        viewHolder.txt_sensor_imu_error.setText(String.valueOf(dataModel.getIMUerror()));
+        viewHolder.txt_sensor_rightdirection.setText(String.valueOf(dataModel.getRightDirection()));
+        viewHolder.txt_sensor_course.setText(String.valueOf(dataModel.getCourse()));
+
         viewHolder.txt_location_lon.setText(String.valueOf(dataModel.getLocation_lon()));
         viewHolder.txt_location_lat.setText(String.valueOf(dataModel.getLocation_lat()));
+        viewHolder.txt_sensor_nsats.setText(String.valueOf(dataModel.getNumbersats()));
+        viewHolder.txt_sensor_snr1.setText(String.valueOf(dataModel.getSNR1()));
+        viewHolder.txt_sensor_snr2.setText(String.valueOf(dataModel.getSNR2()));
+        viewHolder.txt_sensor_snr3.setText(String.valueOf(dataModel.getSNR3()));
+        viewHolder.txt_sensor_snr4.setText(String.valueOf(dataModel.getSNR4()));
+
         viewHolder.status.setOnClickListener(this);
         viewHolder.status.setTag(position);
         // Return the completed view to render on screen
