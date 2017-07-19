@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">K-Logger</string>
+    <string name="app_name">K-Log</string>
 
     <string name="nav_icon_maps">Maps</string>
     <string name="nav_icon_usb">USB Serial</string>
     <string name="nav_icon_bluetooth">Bluetooth</string>
     <string name="nav_icon_debug">Data Logs</string>
 
-    <string name="title_maps">K-Logger</string>
+    <string name="title_maps">K-Log</string>
     <string name="title_usb">USB Serial</string>
     <string name="title_bluetooth">Bluetooth</string>
     <string name="title_debug">Kenny-Loggins</string>
